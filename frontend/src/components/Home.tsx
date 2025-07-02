@@ -1,22 +1,19 @@
 import React, { useState, useRef } from "react";
 
-const Payment = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
+const Payment: React.FC = () => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
-  const fileInputRef = useRef(null);
-  const uploadSectionRef = useRef(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const uploadSectionRef = useRef<HTMLDivElement>(null);
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (file) {
-      // Check file size (5MB limit)
       if (file.size > 5 * 1024 * 1024) {
         alert("File size exceeds 5MB limit");
         return;
       }
-
-      // Check file type
       const validTypes = [
         "application/pdf",
         "application/msword",
@@ -27,7 +24,6 @@ const Payment = () => {
         alert("Please upload a PDF, DOC, DOCX, or TXT file");
         return;
       }
-
       setSelectedFile(file);
       setUploadSuccess(false);
     }
@@ -36,7 +32,7 @@ const Payment = () => {
   const scrollToUpload = () => {
     uploadSectionRef.current?.scrollIntoView({
       behavior: "smooth",
-      block: "center", // Scroll to center the upload section
+      block: "center",
     });
   };
 
@@ -45,25 +41,16 @@ const Payment = () => {
       alert("Please select a file first");
       return;
     }
-
     setIsUploading(true);
-
     try {
       const formData = new FormData();
       formData.append("resume", selectedFile);
-
-      // Replace with your actual API endpoint
       const response = await fetch("http://localhost:5000/api/upload", {
         method: "POST",
         body: formData,
       });
-
-      if (!response.ok) {
-        throw new Error("Upload failed");
-      }
-
-      const data = await response.json();
-      console.log("Upload successful:", data);
+      if (!response.ok) throw new Error("Upload failed");
+      await response.json();
       setUploadSuccess(true);
     } catch (error) {
       console.error("Upload error:", error);
@@ -75,8 +62,8 @@ const Payment = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <section className="bg-gradient-to-r from-blue-500 to-indigo-600  text-white py-20">
-        <div className="container sm:pt-32 pt-22  mx-auto px-6 text-center">
+      <section className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-20">
+        <div className="container mx-auto px-6 text-center sm:pt-32 pt-20">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
             Build Your Perfect Resume in Minutes
           </h1>
@@ -190,7 +177,7 @@ const Payment = () => {
                 className={`border-2 border-dashed ${
                   selectedFile ? "border-green-400" : "border-gray-300"
                 } rounded-lg p-8 text-center cursor-pointer hover:border-indigo-400 transition-all`}
-                onClick={() => fileInputRef.current.click()}
+                onClick={() => fileInputRef.current?.click()}
               >
                 <input
                   type="file"
@@ -212,7 +199,7 @@ const Payment = () => {
                     strokeLinejoin="round"
                     strokeWidth="2"
                     d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                  ></path>
+                  />
                 </svg>
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">
                   {uploadSuccess
@@ -234,7 +221,7 @@ const Payment = () => {
                       className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-8 rounded-lg transition-colors"
                       onClick={(e) => {
                         e.stopPropagation();
-                        fileInputRef.current.click();
+                        fileInputRef.current?.click();
                       }}
                     >
                       {selectedFile ? "Change File" : "Browse Files"}

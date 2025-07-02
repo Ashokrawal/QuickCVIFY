@@ -15,11 +15,7 @@ export const ContactPage = () => (
         placeholder="Your Email"
         className="w-full p-3 border rounded"
       />
-      <textarea
-        rows="4"
-        placeholder="Message"
-        className="w-full p-3 border rounded"
-      />
+      <textarea placeholder="Message" className="w-full p-3 border rounded" />
       <button
         type="submit"
         className="bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700"
