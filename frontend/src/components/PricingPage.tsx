@@ -16,7 +16,7 @@ export const PricingPage = () => (
         >
           <h2 className="text-2xl font-bold mb-2">{tier}</h2>
           <p className="text-3xl font-bold mb-4">
-            {tier === "Free" ? "$0" : tier === "Pro" ? "$9" : "$19"}/mo
+            {tier === "Free" ? "$6" : tier === "Pro" ? "$12" : "$19"}/month
           </p>
           <ul className="text-left space-y-2 mb-6">
             <li>✔ ATS Score & Optimization</li>

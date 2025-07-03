@@ -350,7 +350,7 @@ const Payment: React.FC = () => {
         <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-xl font-bold mb-4">ResumeCraft Pro</h3>
+              <h3 className="text-xl font-bold mb-4">QuickCVIFY</h3>
               <p>AI-powered resume builder to help you land your dream job.</p>
             </div>
             <div>
@@ -416,7 +416,7 @@ const Payment: React.FC = () => {
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
             <p>
-              © {new Date().getFullYear()} ResumeCraft Pro. All rights reserved.
+              © {new Date().getFullYear()} QuickCVIFY Pro. All rights reserved.
             </p>
           </div>
         </div>

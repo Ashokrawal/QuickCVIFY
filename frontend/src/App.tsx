@@ -7,7 +7,7 @@ import Navbar from "./components/Navbar.tsx";
 import { FeaturesPage, TemplatesPage } from "./components/FeaturesPage.tsx";
 import { BlogPage } from "./components/BlogPage.tsx";
 import { PricingPage } from "./components/PricingPage.tsx";
-import { AboutUsPage } from "./components/AboutUsPage.tsx";
+
 import { ContactPage } from "./components/ContactPage.tsx";
 
 const routes = [

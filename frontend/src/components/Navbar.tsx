@@ -25,7 +25,7 @@ const Navbar = () => {
           to="/"
           className="text-3xl font-extrabold text-indigo-600 tracking-tight"
         >
-          ResumeCraft Pro
+          QuickCVIFY
         </Link>
 
         {/* Desktop Navigation */}
