@@ -1,17 +1,49 @@
 import React, { useState, useRef } from "react";
+import AtsScore from "./AtsScore";
+import {
+  BarLoader,
+  BounceLoader,
+  CircleLoader,
+  ClimbingBoxLoader,
+  ClipLoader,
+  ClockLoader,
+  DotLoader,
+  FadeLoader,
+  GridLoader,
+  HashLoader,
+  MoonLoader,
+  PacmanLoader,
+  RingLoader,
+  RiseLoader,
+  RotateLoader,
+} from "react-spinners";
+import { CSSProperties } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Loader from "./Loader";
 
-const Payment: React.FC = () => {
+const Home: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [isUploading, setIsUploading] = useState<Boolean>(false);
+  const [uploadSuccess, setUploadSuccess] = useState<Boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const uploadSectionRef = useRef<HTMLDivElement>(null);
+  const [atsScore, setAtsScore] = useState<number | null>(null);
+  const [isRedirecting, setIsRedirecting] = useState<Boolean>(false);
+
+  const navigate = useNavigate();
+
+  const override: CSSProperties = {
+    display: "inline-block",
+    marginRight: "8px",
+    borderColor: "white",
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
         alert("File size exceeds 5MB limit");
+        event.target.value = "";
         return;
       }
       const validTypes = [
@@ -29,6 +61,14 @@ const Payment: React.FC = () => {
     }
   };
 
+  const handleTryBuilderClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsRedirecting(true);
+    setTimeout(() => {
+      navigate("/resume-builder");
+    }, 4000);
+  };
+
   const scrollToUpload = () => {
     uploadSectionRef.current?.scrollIntoView({
       behavior: "smooth",
@@ -41,22 +81,36 @@ const Payment: React.FC = () => {
       alert("Please select a file first");
       return;
     }
+
     setIsUploading(true);
+
     try {
       const formData = new FormData();
       formData.append("resume", selectedFile);
-      const response = await fetch("http://localhost:5000/api/upload", {
-        method: "POST",
-        body: formData,
-      });
+
+      const response = await fetch(
+        "http://localhost:4000/api/upload/ats-score",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      setIsUploading(true); // Show immediately if not already shown
+
       if (!response.ok) throw new Error("Upload failed");
-      await response.json();
+
+      const result = await response.json();
+
+      await new Promise((resolve) => setTimeout(resolve, 1600));
+
       setUploadSuccess(true);
+      setAtsScore(result.atsScore);
     } catch (error) {
       console.error("Upload error:", error);
       alert("Upload failed. Please try again.");
     } finally {
-      setIsUploading(false);
+      setIsUploading(false); // Always hide spinner when done
     }
   };
 
@@ -73,7 +127,7 @@ const Payment: React.FC = () => {
           </p>
           <div className="flex flex-col md:flex-row justify-center gap-4 mb-12">
             <button
-              onClick={scrollToUpload}
+              onClick={handleTryBuilderClick}
               className="bg-white text-indigo-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 duration-200"
             >
               Try Our Builder
@@ -96,7 +150,6 @@ const Payment: React.FC = () => {
         </div>
       </section>
 
-      {/* Value Proposition */}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
@@ -144,7 +197,6 @@ const Payment: React.FC = () => {
         </div>
       </section>
 
-      {/* Why Section */}
       <header className="relative bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
         <div className="container mx-auto px-6 py-24 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
@@ -156,7 +208,7 @@ const Payment: React.FC = () => {
             AI-powered resume analysis and optimization in 30 seconds
           </p>
           <button
-            onClick={scrollToUpload}
+            onClick={handleTryBuilderClick}
             className="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-gray-900 font-bold py-4 px-8 rounded-full text-lg transition-all transform hover:scale-105"
           >
             Upload Your Resume Now
@@ -165,7 +217,6 @@ const Payment: React.FC = () => {
         <div className="absolute bottom-0 left-0 right-0 h-16 bg-white transform skew-y-1 origin-top-left"></div>
       </header>
 
-      {/* File Upload Section */}
       <div
         ref={uploadSectionRef}
         className="container mx-auto px-6 py-12 -mt-8"
@@ -179,6 +230,9 @@ const Payment: React.FC = () => {
                 } rounded-lg p-8 text-center cursor-pointer hover:border-indigo-400 transition-all`}
                 onClick={() => fileInputRef.current?.click()}
               >
+                <h1 className="font-bold text-2xl mb-6">
+                  Check Your Resume's Score
+                </h1>
                 <input
                   type="file"
                   ref={fileInputRef}
@@ -210,7 +264,7 @@ const Payment: React.FC = () => {
                 </h3>
                 <p className="text-gray-500 mb-4">
                   {uploadSuccess
-                    ? "Your optimized resume is ready!"
+                    ? "Your resume's score is ready!"
                     : selectedFile
                     ? `${(selectedFile.size / 1024 / 1024).toFixed(2)} MB`
                     : "PDF, DOCX, or TXT (max 5MB)"}
@@ -270,16 +324,21 @@ const Payment: React.FC = () => {
                     )}
                   </>
                 ) : (
-                  <button
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-8 rounded-lg transition-colors"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedFile(null);
-                      setUploadSuccess(false);
-                    }}
-                  >
-                    Upload Another Resume
-                  </button>
+                  <>
+                    <button
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-8 rounded-lg transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedFile(null);
+                        setUploadSuccess(false);
+                        setAtsScore(null);
+                      }}
+                    >
+                      Upload Another Resume?
+                    </button>
+
+                    {atsScore !== null && <AtsScore score={atsScore} />}
+                  </>
                 )}
               </div>
             </div>
@@ -328,7 +387,6 @@ const Payment: React.FC = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold mb-6">
@@ -338,7 +396,7 @@ const Payment: React.FC = () => {
             Join thousands of professionals who found their dream jobs
           </p>
           <button
-            onClick={scrollToUpload}
+            onClick={handleTryBuilderClick}
             className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-indigo-700 transition-all"
           >
             Get Started - It's Free
@@ -421,8 +479,11 @@ const Payment: React.FC = () => {
           </div>
         </div>
       </footer>
+
+      {/* FULLSCREEN LOADER on Redirect */}
+      {isRedirecting && <Loader />}
     </div>
   );
 };
 
-export default Payment;
+export default Home;

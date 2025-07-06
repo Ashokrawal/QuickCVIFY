@@ -1,66 +1,54 @@
 import React from "react";
 
-export const FeaturesPage = () => (
-  <div className="min-h-screen bg-white py-20 flex justify-center flex-col text-center px-6">
-    <section className="text-center mb-16">
-      <h1 className="text-5xl font-bold text-indigo-600 mb-4">
-        Powerful Features
-      </h1>
-      <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-        Our resume builder uses AI to maximize your chances of landing
-        interviews by optimizing your content, format, and delivery.
-      </p>
-    </section>
+export const FeaturesPage = () => {
+  const features = [
+    {
+      title: "ATS Optimization",
+      description:
+        "Get past filters used by top companies with built-in AI feedback.",
+      icon: "🔍",
+    },
+    {
+      title: "Real-Time Scoring",
+      description: "Live scoring as you type so you know what's working.",
+      icon: "📊",
+    },
+    {
+      title: "Template Customization",
+      description:
+        "Choose from 150+ templates tailored to your role and goals.",
+      icon: "✨",
+    },
+  ];
 
-    <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-      {["ATS Optimization", "Real-Time Scoring", "Template Customization"].map(
-        (title, index) => (
-          <div
-            key={index}
-            className="p-6 bg-gray-50 rounded-xl shadow-md hover:shadow-lg transition"
-          >
-            <h3 className="text-xl font-semibold text-indigo-600 mb-3">
-              {title}
-            </h3>
-            <p className="text-gray-600">
-              {title === "ATS Optimization"
-                ? "Get past filters used by top companies with built-in AI feedback."
-                : title === "Real-Time Scoring"
-                ? "Live scoring as you type so you know what’s working."
-                : "Choose from 150+ templates tailored to your role and goals."}
-            </p>
-          </div>
-        )
-      )}
-    </div>
-  </div>
-);
+  return (
+    <div className="min-h-screen bg-white px-4 sm:px-6 flex flex-col pt-32 pb-20">
+      <div className="max-w-6xl mx-auto w-full">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-gray-900 mb-4">
+          Powerful Features
+        </h1>
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto text-center mb-8 md:mb-12">
+          Our resume builder uses AI to maximize your chances of landing
+          interviews by optimizing your content, format, and delivery.
+        </p>
 
-export const TemplatesPage = () => (
-  <div className="min-h-screen bg-white py-20 px-6">
-    <section className="text-center mb-12">
-      <h1 className="text-5xl font-bold text-indigo-600 mb-4">
-        Choose a Template
-      </h1>
-      <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-        Browse modern, professional, and creative templates—all ATS-friendly and
-        customizable.
-      </p>
-    </section>
-
-    <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-      {[...Array(6)].map((_, i) => (
-        <div
-          key={i}
-          className="border rounded-lg overflow-hidden shadow hover:shadow-lg transition"
-        >
-          <div className="h-48 bg-gradient-to-br from-indigo-100 to-indigo-200"></div>
-          <div className="p-4">
-            <h3 className="text-lg font-semibold">Template #{i + 1}</h3>
-            <p className="text-sm text-gray-500">Clean, professional layout</p>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {features.map((feature, index) => (
+            <div
+              key={index}
+              className="block bg-white p-5 sm:p-6 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1"
+            >
+              <div className="text-3xl mb-4">{feature.icon}</div>
+              <h3 className="text-lg sm:text-xl font-semibold mb-2 text-black">
+                {feature.title}
+              </h3>
+              <p className="text-sm sm:text-base text-gray-600">
+                {feature.description}
+              </p>
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
     </div>
-  </div>
-);
+  );
+};

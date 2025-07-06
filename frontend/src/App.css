@@ -1,0 +1,26 @@
+@keyframes checkmark {
+  0% {
+    stroke-dashoffset: 100px;
+  }
+  100% {
+    stroke-dashoffset: 0px;
+  }
+}
+
+@keyframes checkmark-circle {
+  0% {
+    stroke-dashoffset: 480px;
+  }
+  100% {
+    stroke-dashoffset: 960px;
+  }
+}
+
+@keyframes colored-circle {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
